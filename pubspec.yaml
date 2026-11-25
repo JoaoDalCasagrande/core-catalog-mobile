@@ -1,0 +1,28 @@
+name: core_catalog_mobile
+description: "Core Catalog Mobile - catálogo de peças de PC e montagem de builds dentro do orçamento."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  # Requisições HTTP para a API NestJS (core-catalog)
+  http: ^1.2.0
+  # Guarda o token JWT e o endereço da API no aparelho (equivalente ao localStorage do web)
+  shared_preferences: ^2.2.0
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ">=4.0.0 <7.0.0"
+
+flutter:
+  uses-material-design: true
+
