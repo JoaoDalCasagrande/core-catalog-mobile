@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Acesso à API Core Catalog (back-end NestJS) -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
-        android:label="core_catalog_mobile"
+        android:label="Core Catalog"
+        android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
