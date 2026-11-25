@@ -8,9 +8,7 @@ Aplicativo Flutter (Android e iOS) do projeto **Core Catalog**: a versão mobile
 | Nome |
 | ---- |
 | João Gabriel Dal'Forno Casagrande |
-| _(nome do integrante)_ |
-| _(nome do integrante)_ |
-| _(nome do integrante)_ |
+| Lucca Lampert De Conto |
 
 ## Nome do aplicativo
 
