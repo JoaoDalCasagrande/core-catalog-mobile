@@ -1,9 +1,7 @@
-/// Modelos que espelham as respostas da API core-catalog (NestJS + Prisma).
 library;
 
 int _int(dynamic value) => value is num ? value.toInt() : int.parse('$value');
 
-/// GET /components
 class CatalogComponent {
   final int id;
   final String name;
@@ -12,7 +10,6 @@ class CatalogComponent {
   final int powerWatts;
   final String manufacturerName;
 
-  /// Usado para pré-selecionar o fabricante ao editar a peça.
   final int? manufacturerId;
 
   const CatalogComponent({
@@ -40,7 +37,6 @@ class CatalogComponent {
   }
 }
 
-/// GET /manufacturers
 class Manufacturer {
   final int id;
   final String name;
@@ -51,7 +47,6 @@ class Manufacturer {
       Manufacturer(id: _int(json['id']), name: json['name'] as String);
 }
 
-/// GET /builds/mine e POST /builds
 class BuildListItem {
   final int id;
   final String name;
@@ -70,7 +65,6 @@ class BuildListItem {
       );
 }
 
-/// Item de GET /builds/:id/summary
 class BuildSummaryItem {
   final int componentId;
   final String name;
@@ -105,7 +99,6 @@ class BuildSummaryItem {
       );
 }
 
-/// GET /builds/:id/summary
 class BuildSummary {
   final String name;
   final String owner;
@@ -142,13 +135,11 @@ class BuildSummary {
       );
 }
 
-/// GET /profiles/me (sem `user`) e GET /profiles (com `user`)
 class Profile {
   final int id;
   final int userId;
   final String fullName;
 
-  /// ISO vindo da API, ex.: "1990-01-15T00:00:00.000Z".
   final String? birthDate;
   final String? avatarUrl;
   final String? userName;
@@ -164,7 +155,6 @@ class Profile {
     this.userEmail,
   });
 
-  /// "AAAA-MM-DD" para preencher o formulário.
   String? get birthDateOnly =>
       birthDate != null && birthDate!.length >= 10
           ? birthDate!.substring(0, 10)
@@ -184,7 +174,6 @@ class Profile {
   }
 }
 
-/// GET /users
 class AppUser {
   final int id;
   final String name;
@@ -199,7 +188,6 @@ class AppUser {
       );
 }
 
-/// Dados de quem está logado, lidos do payload do JWT ({ sub, email, name }).
 class SessionUser {
   final int id;
   final String name;

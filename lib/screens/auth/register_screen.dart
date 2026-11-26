@@ -39,7 +39,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _error = '';
     });
     try {
-      // O register já devolve o token, então o usuário entra direto
       await CoreCatalogApi.instance.register(
         _name.text.trim(),
         _email.text.trim(),

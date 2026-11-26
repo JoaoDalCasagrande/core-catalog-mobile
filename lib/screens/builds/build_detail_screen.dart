@@ -9,8 +9,6 @@ import '../../widgets/budget_ruler.dart';
 import '../../widgets/common.dart';
 import '../catalog/catalog_screen.dart';
 
-/// Resumo da build (GET /builds/:id/summary): gasto x orçamento, consumo,
-/// régua por categoria e a tabela de peças.
 class BuildDetailScreen extends StatefulWidget {
   const BuildDetailScreen({super.key, required this.buildId});
 
@@ -155,7 +153,6 @@ class _BuildDetailScreenState extends State<BuildDetailScreen> {
         ),
         const SizedBox(height: 12),
       ],
-      // Card do gasto + régua
       Container(
         padding: const EdgeInsets.all(16),
         decoration: appCardDecoration(),

@@ -10,11 +10,6 @@ import '../../widgets/common.dart';
 import '../../widgets/date_field.dart';
 import '../settings/api_server_dialog.dart';
 
-/// "Meu perfil": cria (POST /profiles/me) ou atualiza (PATCH /profiles/:id)
-/// o perfil da conta logada. Cada conta tem um único perfil.
-///
-/// Com [popOnSave], volta para a tela anterior depois de salvar
-/// (no web: `/perfil?next=/builds/new`).
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, this.popOnSave = false});
 
@@ -153,7 +148,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
           children: [
-            // Prévia (avatar + nome), como a coluna da direita do web
             Container(
               padding: const EdgeInsets.all(20),
               decoration: appCardDecoration(color: AppColors.bgPage),
@@ -294,7 +288,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-/// URL opcional: vazio é aceito; se preenchido, precisa ser http(s).
 String? validateOptionalUrl(String? value) {
   final text = (value ?? '').trim();
   if (text.isEmpty) return null;

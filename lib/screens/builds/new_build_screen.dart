@@ -10,7 +10,6 @@ import '../../widgets/common.dart';
 import '../profile/profile_screen.dart';
 import 'build_detail_screen.dart';
 
-/// "Nova build": nome + orçamento máximo. Exige que a conta tenha perfil.
 class NewBuildScreen extends StatefulWidget {
   const NewBuildScreen({super.key});
 
@@ -80,7 +79,6 @@ class _NewBuildScreenState extends State<NewBuildScreen> {
 
     setState(() => _saving = true);
     try {
-      // O perfil não é enviado: o back-end usa o dono do token
       final created = await CoreCatalogApi.instance
           .createBuild(_name.text.trim(), _budgetCents);
       if (!mounted) return;
@@ -190,7 +188,6 @@ class _NewBuildScreenState extends State<NewBuildScreen> {
   }
 }
 
-/// Prévia da build vazia com a régua do orçamento.
 class _Preview extends StatelessWidget {
   const _Preview({required this.name, required this.budgetCents});
 

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../utils/formatters.dart';
 
-/// Campo de data (substitui o `<input type="date">` do web).
-/// Trabalha com o texto "AAAA-MM-DD"; null quando vazio.
 class DateField extends StatelessWidget {
   const DateField({
     super.key,

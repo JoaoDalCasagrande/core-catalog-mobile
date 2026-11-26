@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../utils/formatters.dart';
 
-/// Um pedaço colorido da régua (uma peça da build).
 class RulerSegment {
   final int cents;
   final Color color;
@@ -11,11 +10,6 @@ class RulerSegment {
   const RulerSegment(this.cents, this.color);
 }
 
-/// A "régua" do orçamento: cada peça ocupa uma fatia proporcional ao preço,
-/// com a linha de limite do orçamento e as marcas de 0%, 25%, 50%, 75% e 100%.
-///
-/// Como no web, a escala vai até o maior valor entre orçamento e total,
-/// para a régua não sair da tela quando a build estoura.
 class BudgetRuler extends StatelessWidget {
   const BudgetRuler({
     super.key,
@@ -46,7 +40,6 @@ class BudgetRuler extends StatelessWidget {
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              // Trilho + fatias
               Positioned(
                 left: 0,
                 right: 0,
@@ -69,7 +62,6 @@ class BudgetRuler extends StatelessWidget {
                   ),
                 ),
               ),
-              // Linha do limite do orçamento
               if (showLimit)
                 Positioned(
                   left: (x(maxBudgetCents) - 1).clamp(0, width - 2).toDouble(),
@@ -78,7 +70,6 @@ class BudgetRuler extends StatelessWidget {
                   height: _trackHeight + 8,
                   child: const ColoredBox(color: AppColors.textPrimary),
                 ),
-              // Marcas da escala
               for (final p in _marks) ...[
                 Positioned(
                   left: (x(maxBudgetCents * p / 100) - 0.5)

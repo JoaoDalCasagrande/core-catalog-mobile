@@ -9,7 +9,6 @@ import '../../widgets/common.dart';
 import '../../widgets/date_field.dart';
 import '../profile/profile_screen.dart' show validateOptionalUrl;
 
-/// Perfis: CRUD de /profiles, escolhendo o usuário dono de cada perfil.
 class ProfilesAdminScreen extends StatefulWidget {
   const ProfilesAdminScreen({super.key});
 
@@ -56,7 +55,6 @@ class _ProfilesAdminScreenState extends State<ProfilesAdminScreen> {
     }
   }
 
-  /// Um usuário só pode ter um perfil: no cadastro, só aparecem os que não têm.
   List<AppUser> get _usersWithoutProfile => _users
       .where((u) => !_profiles.any((p) => p.userId == u.id))
       .toList();
@@ -173,7 +171,6 @@ class _ProfilesAdminScreenState extends State<ProfilesAdminScreen> {
   }
 }
 
-/// Formulário de perfil (admin). Na edição o usuário fica travado.
 class ProfileFormScreen extends StatefulWidget {
   const ProfileFormScreen({
     super.key,

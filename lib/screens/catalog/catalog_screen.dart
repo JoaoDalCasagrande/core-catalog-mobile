@@ -20,7 +20,6 @@ const sortLabels = {
   SortKey.name: 'Nome',
 };
 
-/// Ordem das categorias como no protótipo; categorias extras vão para o fim.
 const categoryOrder = [
   'CPU',
   'GPU',
@@ -30,11 +29,6 @@ const categoryOrder = [
   'Fonte',
 ];
 
-/// Catálogo de peças com filtros (categoria, fabricante, busca e ordenação)
-/// e o botão "Adicionar" para colocar a peça em uma build.
-///
-/// Com [targetBuild], é aberto a partir de uma build ("Adicionar peça")
-/// e adiciona direto nela, como o `/?buildId=` do web.
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key, this.targetBuild, this.onOpenBuilds});
 
@@ -142,10 +136,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
     return filtered;
   }
 
-  // -------------------------------------------------------- adicionar
-
-  /// Se já há build escolhida, adiciona direto. Senão, carrega as builds
-  /// do usuário e mostra a lista para escolher (como no web).
   Future<void> _onAdd(CatalogComponent component) async {
     if (!await ensureLoggedIn(context)) return;
     if (!mounted) return;
@@ -192,14 +182,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
       final qty = quantity > 1 ? '$quantity× ' : '';
       showSnack(context, '$qty${component.name} adicionada à build ${build.name}.');
     } on ApiException catch (e) {
-      // Ex.: "Item ultrapassa o orçamento da build: ..."
       if (mounted) showSnack(context, e.message, error: true);
     } finally {
       if (mounted) setState(() => _addingId = null);
     }
   }
-
-  // ------------------------------------------------------------ filtros
 
   Future<void> _openManufacturerFilter() async {
     final manufacturers = _manufacturers;
@@ -263,8 +250,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
       ),
     );
   }
-
-  // --------------------------------------------------------------- UI
 
   @override
   Widget build(BuildContext context) {
@@ -443,7 +428,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
   }
 }
 
-/// Uma linha do catálogo: nome, fabricante, categoria, consumo e preço.
 class _ComponentCard extends StatelessWidget {
   const _ComponentCard({
     required this.component,
@@ -515,7 +499,6 @@ class _ComponentCard extends StatelessWidget {
   }
 }
 
-/// Resultado da escolha de build no "Adicionar".
 class _BuildChoice {
   final BuildListItem? build;
   final int quantity;
@@ -530,7 +513,6 @@ class _BuildChoice {
         createNew = true;
 }
 
-/// "Escolha a build para adicionar X" (+ quantidade, que a API aceita).
 class _BuildPickerSheet extends StatefulWidget {
   const _BuildPickerSheet({required this.component, required this.builds});
 
@@ -653,7 +635,6 @@ class _BuildPickerSheetState extends State<_BuildPickerSheet> {
   }
 }
 
-/// Menu da conta no topo do catálogo: Entrar / Criar conta, ou Builds / Sair.
 class _AccountMenu extends StatelessWidget {
   const _AccountMenu({this.onOpenBuilds});
 

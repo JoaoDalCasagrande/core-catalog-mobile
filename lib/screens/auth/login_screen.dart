@@ -9,9 +9,6 @@ import '../settings/api_server_dialog.dart';
 import 'auth_preview.dart';
 import 'register_screen.dart';
 
-/// Abre a tela de login se ainda não estiver logado.
-/// Equivale ao `requireLogin` / `/login?next=` do web: depois de entrar,
-/// a ação que pediu login continua de onde parou.
 Future<bool> ensureLoggedIn(BuildContext context) async {
   if (Session.instance.isAuthenticated) return true;
   final ok = await Navigator.of(context).push<bool>(
