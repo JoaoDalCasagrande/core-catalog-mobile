@@ -8,7 +8,6 @@ import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 import '../auth/login_screen.dart' show validateEmail;
 
-/// Usuários: cadastrar, editar e excluir contas (CRUD de /users).
 class UsersAdminScreen extends StatefulWidget {
   const UsersAdminScreen({super.key});
 
@@ -67,7 +66,6 @@ class _UsersAdminScreenState extends State<UsersAdminScreen> {
     try {
       await CoreCatalogApi.instance.deleteUser(user.id);
       if (!mounted) return;
-      // Excluiu a própria conta: a sessão deixa de valer
       if (Session.instance.user?.id == user.id) {
         await Session.instance.signOut();
         if (mounted) Navigator.of(context).pop();
@@ -136,7 +134,6 @@ class _UsersAdminScreenState extends State<UsersAdminScreen> {
   }
 }
 
-/// Formulário de usuário. No cadastro pede senha; na edição só nome e e-mail.
 class UserFormScreen extends StatefulWidget {
   const UserFormScreen({super.key, this.user});
 
@@ -176,7 +173,6 @@ class _UserFormScreenState extends State<UserFormScreen> {
         await api.updateUser(
             widget.user!.id, _name.text.trim(), _email.text.trim());
       } else {
-        // A senha vai em texto puro; o back-end gera o hash
         await api.createUser(
             _name.text.trim(), _email.text.trim(), _password.text);
       }

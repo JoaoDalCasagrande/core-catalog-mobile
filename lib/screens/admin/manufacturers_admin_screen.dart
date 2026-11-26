@@ -6,7 +6,6 @@ import '../../services/core_catalog_api.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common.dart';
 
-/// Fabricantes: as marcas disponíveis ao cadastrar uma peça.
 class ManufacturersAdminScreen extends StatefulWidget {
   const ManufacturersAdminScreen({super.key});
 
@@ -82,7 +81,6 @@ class _ManufacturersAdminScreenState extends State<ManufacturersAdminScreen> {
       showSnack(context, 'Fabricante excluído.');
       await _load();
     } on ApiException catch (e) {
-      // Ex.: 409 quando ainda existem peças desse fabricante
       if (mounted) setState(() => _error = e.message);
     }
   }

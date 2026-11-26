@@ -9,8 +9,6 @@ import 'builds/builds_screen.dart';
 import 'catalog/catalog_screen.dart';
 import 'profile/profile_screen.dart';
 
-/// Navegação principal: Catálogo, Builds, Perfil e Admin
-/// (as mesmas áreas do cabeçalho do web).
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 
@@ -92,7 +90,6 @@ class _HomeShellState extends State<HomeShell> {
   }
 }
 
-/// Mostrado nas abas que exigem login (no web, a página redireciona para /login).
 class LoginRequiredView extends StatelessWidget {
   const LoginRequiredView({
     super.key,

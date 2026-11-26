@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../utils/formatters.dart';
 
-/// Faixa de aviso: vermelha para erro (`.alert` no web) ou verde (`.notice`).
 class AlertBanner extends StatelessWidget {
   const AlertBanner(this.message, {super.key, this.isError = true});
 
@@ -33,7 +32,6 @@ class AlertBanner extends StatelessWidget {
   }
 }
 
-/// Título + subtítulo de página, como os <h1> condensados do web.
 class PageHeader extends StatelessWidget {
   const PageHeader({super.key, required this.title, this.subtitle});
 
@@ -55,7 +53,6 @@ class PageHeader extends StatelessWidget {
   }
 }
 
-/// Etiqueta arredondada de categoria (`.chip` no web).
 class CategoryTag extends StatelessWidget {
   const CategoryTag(this.text, {super.key});
 
@@ -81,7 +78,6 @@ class CategoryTag extends StatelessWidget {
   }
 }
 
-/// Avatar com a foto da URL ou, se não houver/não carregar, as iniciais.
 class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({
     super.key,
@@ -131,7 +127,6 @@ class ProfileAvatar extends StatelessWidget {
   }
 }
 
-/// Linha "rótulo .......... valor" (lista de informações do perfil).
 class InfoRow extends StatelessWidget {
   const InfoRow({super.key, required this.label, required this.value});
 
@@ -155,7 +150,6 @@ class InfoRow extends StatelessWidget {
   }
 }
 
-/// Estado de carregamento/vazio centralizado dentro de listas.
 class EmptyState extends StatelessWidget {
   const EmptyState(this.message, {super.key, this.loading = false});
 
@@ -187,7 +181,6 @@ class EmptyState extends StatelessWidget {
   }
 }
 
-/// Botão principal com estado "Salvando..." (desabilita enquanto envia).
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     super.key,
@@ -229,7 +222,6 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
-/// Botão secundário com borda (`.btnSecondary` no web).
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
     super.key,
@@ -268,7 +260,6 @@ class SecondaryButton extends StatelessWidget {
   }
 }
 
-/// Botões "Editar" e "Excluir" de cada linha de uma lista.
 class RowActions extends StatelessWidget {
   const RowActions({super.key, required this.onEdit, required this.onDelete});
 
@@ -295,7 +286,6 @@ class RowActions extends StatelessWidget {
   }
 }
 
-/// Pergunta de confirmação (substitui o `confirm()` do navegador).
 Future<bool> confirmDialog(
   BuildContext context, {
   required String title,

@@ -8,7 +8,6 @@ import 'manufacturers_admin_screen.dart';
 import 'profiles_admin_screen.dart';
 import 'users_admin_screen.dart';
 
-/// Painel de administração (no web: /admin com o menu lateral).
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
 
@@ -28,7 +27,6 @@ class _AdminScreenState extends State<AdminScreen> {
     _loadCounts();
   }
 
-  /// Cada contagem é independente: se uma falhar, fica "—" (como no web).
   Future<void> _loadCounts() async {
     final api = CoreCatalogApi.instance;
     Future<int?> count(Future<List<Object>> Function() load) async {

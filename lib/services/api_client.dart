@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 
 import 'session.dart';
 
-/// Erro devolvido pela API (ou de conexão), com a mensagem pronta para a tela.
 class ApiException implements Exception {
   final String message;
   final int? statusCode;
@@ -18,8 +17,6 @@ class ApiException implements Exception {
   String toString() => message;
 }
 
-/// Cliente HTTP genérico: monta a URL, envia o Bearer token e trata erros
-/// do mesmo jeito que o web (junta `message` quando vem como lista).
 class ApiClient {
   ApiClient(this.session, {http.Client? client})
       : _client = client ?? http.Client();
@@ -64,7 +61,6 @@ class ApiClient {
       );
     }
 
-    // O corpo pode vir vazio (ex.: GET /profiles/me sem perfil responde null)
     final text = utf8.decode(response.bodyBytes, allowMalformed: true);
     dynamic data;
     if (text.trim().isNotEmpty) {
@@ -78,7 +74,6 @@ class ApiClient {
     final status = response.statusCode;
     if (status >= 200 && status < 300) return data;
 
-    // Token expirado ou inválido: encerra a sessão, como o web faz no 401
     if (status == 401 && token != null) {
       await session.signOut(expired: true);
       throw const ApiException(

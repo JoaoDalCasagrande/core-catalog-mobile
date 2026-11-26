@@ -6,8 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/api_config.dart';
 import '../models/models.dart';
 
-/// Sessão do usuário: token JWT e endereço da API, salvos no aparelho.
-/// Equivale ao `auth_service.ts` do web (localStorage "auth_token").
 class Session extends ChangeNotifier {
   Session._();
 
@@ -27,7 +25,6 @@ class Session extends ChangeNotifier {
   String get baseUrl => _baseUrl;
   bool get isAuthenticated => _token != null;
 
-  /// Verdadeiro quando a sessão caiu por token expirado/inválido (HTTP 401).
   bool get expired => _expired;
 
   Future<void> load() async {
@@ -77,7 +74,6 @@ class Session extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Lê o payload do JWT (parte do meio, em base64url) sem validar a assinatura.
   static Map<String, dynamic>? decodeJwtPayload(String token) {
     final parts = token.split('.');
     if (parts.length != 3) return null;

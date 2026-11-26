@@ -17,7 +17,6 @@ void main() {
     });
     expect(c.manufacturerName, 'AMD');
     expect(c.priceCents, 189900);
-    // Respostas antigas não traziam o id do fabricante
     expect(c.manufacturerId, isNull);
   });
 

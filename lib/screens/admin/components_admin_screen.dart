@@ -9,7 +9,6 @@ import '../../widgets/common.dart';
 import '../catalog/catalog_screen.dart' show categoryOrder;
 import 'manufacturers_admin_screen.dart';
 
-/// Peças: lista do catálogo e cadastro de novas peças (POST /components).
 class ComponentsAdminScreen extends StatefulWidget {
   const ComponentsAdminScreen({super.key});
 
@@ -89,7 +88,6 @@ class _ComponentsAdminScreenState extends State<ComponentsAdminScreen> {
       showSnack(context, 'Peça excluída.');
       await _load();
     } on ApiException catch (e) {
-      // Ex.: 409 quando a peça já está em alguma build
       if (mounted) setState(() => _error = e.message);
     }
   }
@@ -181,7 +179,6 @@ class _ComponentsAdminScreenState extends State<ComponentsAdminScreen> {
   }
 }
 
-/// Formulário "Nova peça" ou, quando recebe [component], "Editar peça".
 class ComponentFormScreen extends StatefulWidget {
   const ComponentFormScreen({
     super.key,
@@ -228,9 +225,7 @@ class _ComponentFormScreenState extends State<ComponentFormScreen> {
     try {
       final list = await CoreCatalogApi.instance.manufacturers();
       if (mounted) setState(() => _manufacturers = list);
-    } on ApiException {
-      // mantém a lista atual
-    }
+    } on ApiException catch (_) {}
   }
 
   Future<void> _save() async {

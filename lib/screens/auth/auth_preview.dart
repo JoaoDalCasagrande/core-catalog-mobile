@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../theme/app_theme.dart';
 
-/// Prévia ilustrativa de uma build (mesmo bloco fixo das telas de login/cadastro do web).
 class AuthPreview extends StatelessWidget {
   const AuthPreview({super.key});
 
@@ -49,7 +48,6 @@ class AuthPreview extends StatelessWidget {
                       flex: (percent * 10).round(),
                       child: ColoredBox(color: color),
                     ),
-                  // espaço que ainda cabe no orçamento
                   const Expanded(flex: 39, child: SizedBox()),
                 ],
               ),

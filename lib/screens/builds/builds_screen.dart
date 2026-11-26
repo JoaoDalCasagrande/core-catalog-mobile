@@ -9,7 +9,6 @@ import '../../widgets/common.dart';
 import 'build_detail_screen.dart';
 import 'new_build_screen.dart';
 
-/// Lista "Builds": as montagens do usuário e o orçamento de cada uma.
 class BuildsScreen extends StatefulWidget {
   const BuildsScreen({super.key});
 

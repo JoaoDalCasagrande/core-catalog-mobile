@@ -4,7 +4,6 @@ import '../../config/api_config.dart';
 import '../../services/session.dart';
 import '../../theme/app_theme.dart';
 
-/// Ícone que abre a configuração do endereço da API.
 class ApiServerButton extends StatelessWidget {
   const ApiServerButton({super.key});
 
@@ -18,8 +17,6 @@ class ApiServerButton extends StatelessWidget {
   }
 }
 
-/// Permite trocar o endereço da API sem recompilar
-/// (ex.: celular físico apontando para o IP do computador: http://192.168.0.10:3001).
 Future<void> showApiServerDialog(BuildContext context) async {
   final controller = TextEditingController(text: Session.instance.baseUrl);
   String? error;

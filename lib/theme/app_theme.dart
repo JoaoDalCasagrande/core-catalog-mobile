@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Paleta copiada dos tokens CSS do front-end web (catalog.module.css etc.).
 class AppColors {
   static const brand = Color(0xFF0E5C4A);
   static const brand2 = Color(0xFF2E7D6B);
@@ -23,7 +22,6 @@ class AppColors {
   static const alertBg = Color(0xFFFBEAEA);
   static const alertText = Color(0xFF8A1F1F);
 
-  /// Cores da régua por categoria, como em builds/[id]/page.tsx.
   static const categoryColors = <String, Color>{
     'CPU': brand,
     'GPU': brand2,
@@ -42,7 +40,6 @@ class AppFonts {
   static const condensed = 'IBMPlexSansCondensed';
 }
 
-/// Estilos de texto reutilizados nas telas.
 class AppText {
   static const pageTitle = TextStyle(
     fontFamily: AppFonts.condensed,
@@ -112,7 +109,6 @@ ThemeData buildAppTheme() {
   );
 }
 
-/// Decoração padrão dos campos de formulário (borda de 4px como no web).
 InputDecoration appInputDecoration({
   String? label,
   String? hint,
@@ -145,7 +141,6 @@ InputDecoration appInputDecoration({
   );
 }
 
-/// Caixa com borda suave e fundo branco usada como "card" nas telas.
 BoxDecoration appCardDecoration({Color color = AppColors.bgRaised}) {
   return BoxDecoration(
     color: color,

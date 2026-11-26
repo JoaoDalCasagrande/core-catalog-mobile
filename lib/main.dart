@@ -7,7 +7,6 @@ import 'theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Recupera o token salvo e o endereço da API antes de abrir o app
   await Session.instance.load();
   runApp(const CoreCatalogApp());
 }
