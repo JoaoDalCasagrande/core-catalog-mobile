@@ -54,6 +54,24 @@ class _BuildsScreenState extends State<BuildsScreen> {
     if (mounted) _load();
   }
 
+  Future<void> _remove(BuildListItem build) async {
+    final ok = await confirmDialog(
+      context,
+      title: 'Excluir build',
+      message: 'Excluir a build "${build.name}"? Essa ação não pode ser desfeita.',
+    );
+    if (!ok || !mounted) return;
+    setState(() => _error = '');
+    try {
+      await CoreCatalogApi.instance.deleteBuild(build.id);
+      if (!mounted) return;
+      setState(() => _builds = _builds.where((b) => b.id != build.id).toList());
+      showSnack(context, 'Build excluída.');
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
   Future<void> _newBuild() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const NewBuildScreen()),
@@ -129,6 +147,12 @@ class _BuildsScreenState extends State<BuildsScreen> {
                                   ),
                                 ],
                               ),
+                            ),
+                            IconButton(
+                              tooltip: 'Excluir build',
+                              onPressed: () => _remove(b),
+                              icon: const Icon(Icons.delete_outline,
+                                  color: AppColors.alertText),
                             ),
                             const Icon(Icons.chevron_right,
                                 color: AppColors.textSecondary),

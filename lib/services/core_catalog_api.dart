@@ -62,6 +62,29 @@ class CoreCatalogApi {
     });
   }
 
+  /// PATCH /components/:id — só os campos enviados são alterados.
+  Future<void> updateComponent(
+    int id, {
+    required String name,
+    required String category,
+    required int priceCents,
+    required int powerWatts,
+    required int manufacturerId,
+  }) async {
+    await _client.patch('/components/$id', {
+      'name': name,
+      'category': category,
+      'priceCents': priceCents,
+      'powerWatts': powerWatts,
+      'manufacturerId': manufacturerId,
+    });
+  }
+
+  /// DELETE /components/:id — a API recusa (409) se a peça estiver em alguma build.
+  Future<void> deleteComponent(int id) async {
+    await _client.delete('/components/$id');
+  }
+
   /// GET /manufacturers (público)
   Future<List<Manufacturer>> manufacturers() async =>
       _list(await _client.get('/manufacturers'))
@@ -71,6 +94,16 @@ class CoreCatalogApi {
   /// POST /manufacturers
   Future<void> createManufacturer(String name) async {
     await _client.post('/manufacturers', {'name': name});
+  }
+
+  /// PATCH /manufacturers/:id
+  Future<void> updateManufacturer(int id, String name) async {
+    await _client.patch('/manufacturers/$id', {'name': name});
+  }
+
+  /// DELETE /manufacturers/:id — a API recusa (409) se ainda houver peças dele.
+  Future<void> deleteManufacturer(int id) async {
+    await _client.delete('/manufacturers/$id');
   }
 
   // ------------------------------------------------------------ builds
@@ -88,6 +121,11 @@ class CoreCatalogApi {
       'maxBudgetCents': maxBudgetCents,
     });
     return BuildListItem.fromJson(data as Map<String, dynamic>);
+  }
+
+  /// DELETE /builds/:id — só o dono da build pode excluir.
+  Future<void> deleteBuild(int id) async {
+    await _client.delete('/builds/$id');
   }
 
   /// POST /builds/:id/items — a API recusa se passar do orçamento.

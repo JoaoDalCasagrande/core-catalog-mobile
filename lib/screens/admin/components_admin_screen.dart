@@ -55,15 +55,42 @@ class _ComponentsAdminScreenState extends State<ComponentsAdminScreen> {
     }
   }
 
-  Future<void> _newComponent() async {
+  Future<void> _openForm([CatalogComponent? component]) async {
     final saved = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
-        builder: (_) => ComponentFormScreen(manufacturers: _manufacturers),
+        builder: (_) => ComponentFormScreen(
+          manufacturers: _manufacturers,
+          component: component,
+        ),
       ),
     );
     if (mounted) {
-      if (saved == true) showSnack(context, 'Peça cadastrada.');
+      if (saved == true) {
+        showSnack(
+          context,
+          component == null ? 'Peça cadastrada.' : 'Peça atualizada.',
+        );
+      }
       _load();
+    }
+  }
+
+  Future<void> _remove(CatalogComponent component) async {
+    final ok = await confirmDialog(
+      context,
+      title: 'Excluir peça',
+      message: 'Excluir a peça "${component.name}"?',
+    );
+    if (!ok || !mounted) return;
+    setState(() => _error = '');
+    try {
+      await CoreCatalogApi.instance.deleteComponent(component.id);
+      if (!mounted) return;
+      showSnack(context, 'Peça excluída.');
+      await _load();
+    } on ApiException catch (e) {
+      // Ex.: 409 quando a peça já está em alguma build
+      if (mounted) setState(() => _error = e.message);
     }
   }
 
@@ -76,7 +103,7 @@ class _ComponentsAdminScreenState extends State<ComponentsAdminScreen> {
         title: const Text('Peças', style: AppText.sectionTitle),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _loading ? null : _newComponent,
+        onPressed: _loading ? null : () => _openForm(),
         backgroundColor: AppColors.brand,
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add),
@@ -128,6 +155,11 @@ class _ComponentsAdminScreenState extends State<ComponentsAdminScreen> {
                           Text(formatMoney(c.priceCents), style: AppText.price),
                           const SizedBox(height: 4),
                           Text('${c.powerWatts} W', style: AppText.secondary),
+                          const SizedBox(height: 4),
+                          RowActions(
+                            onEdit: () => _openForm(c),
+                            onDelete: () => _remove(c),
+                          ),
                         ],
                       ),
                     ],
@@ -149,11 +181,16 @@ class _ComponentsAdminScreenState extends State<ComponentsAdminScreen> {
   }
 }
 
-/// Formulário "Nova peça".
+/// Formulário "Nova peça" ou, quando recebe [component], "Editar peça".
 class ComponentFormScreen extends StatefulWidget {
-  const ComponentFormScreen({super.key, required this.manufacturers});
+  const ComponentFormScreen({
+    super.key,
+    required this.manufacturers,
+    this.component,
+  });
 
   final List<Manufacturer> manufacturers;
+  final CatalogComponent? component;
 
   @override
   State<ComponentFormScreen> createState() => _ComponentFormScreenState();
@@ -161,14 +198,19 @@ class ComponentFormScreen extends StatefulWidget {
 
 class _ComponentFormScreenState extends State<ComponentFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _name = TextEditingController();
-  final _category = TextEditingController();
-  final _price = TextEditingController(text: formatMoney(0));
-  final _watts = TextEditingController();
+  late final _name = TextEditingController(text: widget.component?.name);
+  late final _category =
+      TextEditingController(text: widget.component?.category);
+  late final _price =
+      TextEditingController(text: formatMoney(widget.component?.priceCents ?? 0));
+  late final _watts = TextEditingController(
+      text: widget.component == null ? '' : '${widget.component!.powerWatts}');
   late List<Manufacturer> _manufacturers = widget.manufacturers;
-  int? _manufacturerId;
+  late int? _manufacturerId = widget.component?.manufacturerId;
   bool _saving = false;
   String _error = '';
+
+  bool get _isEditing => widget.component != null;
 
   @override
   void dispose() {
@@ -206,13 +248,25 @@ class _ComponentFormScreenState extends State<ComponentFormScreen> {
 
     setState(() => _saving = true);
     try {
-      await CoreCatalogApi.instance.createComponent(
-        name: _name.text.trim(),
-        category: _category.text.trim(),
-        priceCents: priceCents,
-        powerWatts: int.parse(_watts.text.trim()),
-        manufacturerId: _manufacturerId!,
-      );
+      final api = CoreCatalogApi.instance;
+      if (_isEditing) {
+        await api.updateComponent(
+          widget.component!.id,
+          name: _name.text.trim(),
+          category: _category.text.trim(),
+          priceCents: priceCents,
+          powerWatts: int.parse(_watts.text.trim()),
+          manufacturerId: _manufacturerId!,
+        );
+      } else {
+        await api.createComponent(
+          name: _name.text.trim(),
+          category: _category.text.trim(),
+          priceCents: priceCents,
+          powerWatts: int.parse(_watts.text.trim()),
+          manufacturerId: _manufacturerId!,
+        );
+      }
       if (mounted) Navigator.of(context).pop(true);
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
@@ -227,7 +281,8 @@ class _ComponentFormScreenState extends State<ComponentFormScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.bgSurface,
         surfaceTintColor: Colors.transparent,
-        title: const Text('Nova peça', style: AppText.sectionTitle),
+        title: Text(_isEditing ? 'Editar peça' : 'Nova peça',
+            style: AppText.sectionTitle),
       ),
       body: SafeArea(
         child: Form(
@@ -323,8 +378,8 @@ class _ComponentFormScreenState extends State<ComponentFormScreen> {
               ),
               const SizedBox(height: 24),
               PrimaryButton(
-                label: 'Cadastrar peça',
-                busyLabel: 'Cadastrando...',
+                label: _isEditing ? 'Salvar' : 'Cadastrar peça',
+                busyLabel: _isEditing ? 'Salvando...' : 'Cadastrando...',
                 busy: _saving,
                 onPressed: _save,
               ),

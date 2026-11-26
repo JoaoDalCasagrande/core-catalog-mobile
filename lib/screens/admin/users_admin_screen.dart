@@ -120,7 +120,7 @@ class _UsersAdminScreenState extends State<UsersAdminScreen> {
                         leading: ProfileAvatar(name: _users[i].name, size: 40),
                         title: Text(_users[i].name, style: AppText.label),
                         subtitle: Text(_users[i].email),
-                        trailing: _RowActions(
+                        trailing: RowActions(
                           onEdit: () => _openForm(_users[i]),
                           onDelete: () => _remove(_users[i]),
                         ),
@@ -132,33 +132,6 @@ class _UsersAdminScreenState extends State<UsersAdminScreen> {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Botões "Editar" e "Excluir" de cada linha.
-class _RowActions extends StatelessWidget {
-  const _RowActions({required this.onEdit, required this.onDelete});
-
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-          tooltip: 'Editar',
-          onPressed: onEdit,
-          icon: const Icon(Icons.edit_outlined, color: AppColors.brand),
-        ),
-        IconButton(
-          tooltip: 'Excluir',
-          onPressed: onDelete,
-          icon: const Icon(Icons.delete_outline, color: AppColors.alertText),
-        ),
-      ],
     );
   }
 }
