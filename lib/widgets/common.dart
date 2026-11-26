@@ -268,6 +268,33 @@ class SecondaryButton extends StatelessWidget {
   }
 }
 
+/// Botões "Editar" e "Excluir" de cada linha de uma lista.
+class RowActions extends StatelessWidget {
+  const RowActions({super.key, required this.onEdit, required this.onDelete});
+
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          tooltip: 'Editar',
+          onPressed: onEdit,
+          icon: const Icon(Icons.edit_outlined, color: AppColors.brand),
+        ),
+        IconButton(
+          tooltip: 'Excluir',
+          onPressed: onDelete,
+          icon: const Icon(Icons.delete_outline, color: AppColors.alertText),
+        ),
+      ],
+    );
+  }
+}
+
 /// Pergunta de confirmação (substitui o `confirm()` do navegador).
 Future<bool> confirmDialog(
   BuildContext context, {

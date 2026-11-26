@@ -12,6 +12,9 @@ class CatalogComponent {
   final int powerWatts;
   final String manufacturerName;
 
+  /// Usado para pré-selecionar o fabricante ao editar a peça.
+  final int? manufacturerId;
+
   const CatalogComponent({
     required this.id,
     required this.name,
@@ -19,6 +22,7 @@ class CatalogComponent {
     required this.priceCents,
     required this.powerWatts,
     required this.manufacturerName,
+    this.manufacturerId,
   });
 
   factory CatalogComponent.fromJson(Map<String, dynamic> json) {
@@ -30,6 +34,8 @@ class CatalogComponent {
       priceCents: _int(json['priceCents']),
       powerWatts: _int(json['powerWatts']),
       manufacturerName: manufacturer is Map ? '${manufacturer['name']}' : '',
+      manufacturerId:
+          json['manufacturerId'] == null ? null : _int(json['manufacturerId']),
     );
   }
 }

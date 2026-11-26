@@ -17,6 +17,21 @@ void main() {
     });
     expect(c.manufacturerName, 'AMD');
     expect(c.priceCents, 189900);
+    // Respostas antigas não traziam o id do fabricante
+    expect(c.manufacturerId, isNull);
+  });
+
+  test('CatalogComponent.fromJson lê manufacturerId (usado ao editar a peça)', () {
+    final c = CatalogComponent.fromJson({
+      'id': 2,
+      'name': 'Core i5',
+      'category': 'CPU',
+      'priceCents': 150000,
+      'powerWatts': 125,
+      'manufacturerId': 7,
+      'manufacturer': {'name': 'Intel'},
+    });
+    expect(c.manufacturerId, 7);
   });
 
   test('BuildSummary.fromJson (GET /builds/:id/summary)', () {

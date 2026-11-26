@@ -72,6 +72,26 @@ class _BuildDetailScreenState extends State<BuildDetailScreen> {
     if (mounted) _load();
   }
 
+  Future<void> _remove() async {
+    final summary = _summary;
+    if (summary == null) return;
+    final ok = await confirmDialog(
+      context,
+      title: 'Excluir build',
+      message: 'Excluir a build "${summary.name}"? Essa ação não pode ser desfeita.',
+    );
+    if (!ok || !mounted) return;
+    setState(() => _error = '');
+    try {
+      await CoreCatalogApi.instance.deleteBuild(widget.buildId);
+      if (!mounted) return;
+      showSnack(context, 'Build excluída.');
+      Navigator.of(context).pop();
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final summary = _summary;
@@ -81,6 +101,12 @@ class _BuildDetailScreenState extends State<BuildDetailScreen> {
         surfaceTintColor: Colors.transparent,
         title: Text(summary?.name ?? 'Build', style: AppText.sectionTitle),
         actions: [
+          if (summary != null)
+            IconButton(
+              tooltip: 'Excluir build',
+              onPressed: _remove,
+              icon: const Icon(Icons.delete_outline, color: AppColors.alertText),
+            ),
           IconButton(
             tooltip: 'Atualizar',
             onPressed: _loading ? null : _load,

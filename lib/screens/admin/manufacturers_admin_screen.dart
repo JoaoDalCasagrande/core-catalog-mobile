@@ -19,6 +19,7 @@ class _ManufacturersAdminScreenState extends State<ManufacturersAdminScreen> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   List<Manufacturer> _manufacturers = [];
+  Manufacturer? _editing;
   bool _loading = true;
   bool _saving = false;
   String _error = '';
@@ -50,17 +51,64 @@ class _ManufacturersAdminScreenState extends State<ManufacturersAdminScreen> {
     }
   }
 
+  void _edit(Manufacturer manufacturer) {
+    setState(() {
+      _error = '';
+      _editing = manufacturer;
+      _name.text = manufacturer.name;
+    });
+  }
+
+  void _cancelEdit() {
+    FocusScope.of(context).unfocus();
+    setState(() {
+      _editing = null;
+      _name.clear();
+    });
+  }
+
+  Future<void> _remove(Manufacturer manufacturer) async {
+    final ok = await confirmDialog(
+      context,
+      title: 'Excluir fabricante',
+      message: 'Excluir o fabricante "${manufacturer.name}"?',
+    );
+    if (!ok || !mounted) return;
+    setState(() => _error = '');
+    try {
+      await CoreCatalogApi.instance.deleteManufacturer(manufacturer.id);
+      if (!mounted) return;
+      if (_editing?.id == manufacturer.id) _cancelEdit();
+      showSnack(context, 'Fabricante excluído.');
+      await _load();
+    } on ApiException catch (e) {
+      // Ex.: 409 quando ainda existem peças desse fabricante
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
   Future<void> _save() async {
     setState(() => _error = '');
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     try {
       final name = _name.text.trim();
-      await CoreCatalogApi.instance.createManufacturer(name);
+      final editing = _editing;
+      if (editing != null) {
+        await CoreCatalogApi.instance.updateManufacturer(editing.id, name);
+      } else {
+        await CoreCatalogApi.instance.createManufacturer(name);
+      }
       if (!mounted) return;
       _name.clear();
       FocusScope.of(context).unfocus();
-      showSnack(context, 'Fabricante $name cadastrado.');
+      setState(() => _editing = null);
+      showSnack(
+        context,
+        editing != null
+            ? 'Fabricante $name atualizado.'
+            : 'Fabricante $name cadastrado.',
+      );
       await _load();
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
@@ -100,7 +148,8 @@ class _ManufacturersAdminScreenState extends State<ManufacturersAdminScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Novo fabricante', style: AppText.sectionTitle),
+                    Text(_editing != null ? 'Editar fabricante' : 'Novo fabricante',
+                        style: AppText.sectionTitle),
                     const SizedBox(height: 12),
                     TextFormField(
                       controller: _name,
@@ -115,11 +164,19 @@ class _ManufacturersAdminScreenState extends State<ManufacturersAdminScreen> {
                     ),
                     const SizedBox(height: 8),
                     PrimaryButton(
-                      label: 'Cadastrar fabricante',
-                      busyLabel: 'Cadastrando...',
+                      label: _editing != null ? 'Salvar' : 'Cadastrar fabricante',
+                      busyLabel:
+                          _editing != null ? 'Salvando...' : 'Cadastrando...',
                       busy: _saving,
                       onPressed: _save,
                     ),
+                    if (_editing != null) ...[
+                      const SizedBox(height: 10),
+                      SecondaryButton(
+                        label: 'Cancelar',
+                        onPressed: _cancelEdit,
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -139,8 +196,12 @@ class _ManufacturersAdminScreenState extends State<ManufacturersAdminScreen> {
                       ListTile(
                         title: Text(_manufacturers[i].name,
                             style: AppText.label),
-                        trailing: Text('ID ${_manufacturers[i].id}',
+                        subtitle: Text('ID ${_manufacturers[i].id}',
                             style: AppText.secondary),
+                        trailing: RowActions(
+                          onEdit: () => _edit(_manufacturers[i]),
+                          onDelete: () => _remove(_manufacturers[i]),
+                        ),
                       ),
                     ],
                   ],
